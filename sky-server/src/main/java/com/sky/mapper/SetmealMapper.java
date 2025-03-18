@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.sky.annotation.AutoFill;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
