@@ -30,7 +30,7 @@ public class BitifulUtil {
     private final S3Client s3Client;
     private final S3Presigner s3Presigner;
 
-    @Value("${s4.bucket-name}")
+    @Value("${bitiful.bucket-name}")
     private String bucketPathConfig;
 
     // 存储桶名称和前缀路径

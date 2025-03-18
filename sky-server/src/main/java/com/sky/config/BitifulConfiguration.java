@@ -20,16 +20,16 @@ import java.net.URI;
 @Configuration
 public class BitifulConfiguration {
 
-    @Value("${s4.endpoint}")
+    @Value("${bitiful.endpoint}")
     private String endpoint;
 
-    @Value("${s4.region}")
+    @Value("${bitiful.region}")
     private String region;
 
-    @Value("${s4.access-key}")
+    @Value("${bitiful.access-key}")
     private String accessKey;
 
-    @Value("${s4.secret-key}")
+    @Value("${bitiful.secret-key}")
     private String secretKey;
 
     @Bean
