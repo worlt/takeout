@@ -6,3 +6,11 @@ sky:
     database: sky_take_out
     username: root
     password: 20539
+
+# bitiful config
+bitiful:
+  endpoint: https://s3.bitiful.net/
+  region: cn-north-1
+  access-key: ${bitiful.access-key}
+  secret-key: ${bitiful.access-key}
+  bucket-name: worlt-pic/sky-take-away
