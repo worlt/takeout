@@ -47,39 +47,48 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      * @return
      */
     @Bean
-    public Docket docket1() {
+    public Docket docket1(){
+        log.info("准备生成接口文档...");
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("项目接口文档")
                 .version("2.0")
                 .description("项目接口文档")
                 .build();
+
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("管理端接口")
                 .apiInfo(apiInfo)
                 .select()
-                // 置顶生成接口要扫描的包
+                //指定生成接口需要扫描的包
                 .apis(RequestHandlerSelectors.basePackage("com.sky.controller.admin"))
                 .paths(PathSelectors.any())
                 .build();
+
         return docket;
     }
 
     /**
      * 实现管理端和用户端接口进行区分
+     * @return
      */
     @Bean
-    public Docket docket2() {
+    public Docket docket2(){
+        log.info("准备生成接口文档...");
         ApiInfo apiInfo = new ApiInfoBuilder()
                 .title("项目接口文档")
                 .version("2.0")
                 .description("项目接口文档")
                 .build();
+
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
+                .groupName("用户端接口")
                 .apiInfo(apiInfo)
                 .select()
-                // 置顶生成接口要扫描的包
+                //指定生成接口需要扫描的包
                 .apis(RequestHandlerSelectors.basePackage("com.sky.controller.user"))
                 .paths(PathSelectors.any())
                 .build();
+
         return docket;
     }
 
