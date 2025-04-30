@@ -11,8 +11,15 @@ sky:
     port: 6379
     database: 10
   wechat:
-    appid: wx0746193f8001eefe
-    secret: 119b31637edaebde35fcfcad843a9abe
+    appid: #
+    secret: #
+    mchid: #
+    mchSerialNo: #
+    privateKeyFilePath: #
+    apiV3Key: #
+    weChatPayCertFilePath: #
+    notifyUrl: #
+    refundNotifyUrl: #
 
 # bitiful config
 bitiful:
