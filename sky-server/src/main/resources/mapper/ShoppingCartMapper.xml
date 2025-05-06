@@ -8,7 +8,7 @@
             <if test="userId != null">
                 and user_id = #{userId}
             </if>
-            <if test="dishId != nulll">
+            <if test="dishId != null">
                 and dish_id = #{dishId}
             </if>
             <if test="setmealId != null">

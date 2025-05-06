@@ -67,7 +67,7 @@ public class AddressBookController {
      * @param addressBook
      * @return
      */
-    @PostMapping
+    @PutMapping
     @ApiOperation("根据id修改地址")
     public Result update(@RequestBody AddressBook addressBook) {
         addressBookService.update(addressBook);

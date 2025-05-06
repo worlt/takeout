@@ -33,9 +33,6 @@ public class UserController {
     private UserService userService;
     @Autowired
     private JwtProperties jwtProperties;
-    @Autowired
-    private OrderService orderService;
-
 
     /**
      * 微信登录
@@ -44,15 +41,15 @@ public class UserController {
      */
     @PostMapping("/login")
     @ApiOperation("微信登录")
-    public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO) {
-        log.info("微信用户登录：{}", userLoginDTO.getCode());
+    public Result<UserLoginVO> login(@RequestBody UserLoginDTO userLoginDTO){
+        log.info("微信用户登录：{}",userLoginDTO.getCode());
 
-        // 微信登录
+        //微信登录
         User user = userService.wxLogin(userLoginDTO);
 
-        // 为微信用户生成jwt令牌
+        //为微信用户生成jwt令牌
         Map<String, Object> claims = new HashMap<>();
-        claims.put(JwtClaimsConstant.USER_ID, user.getId());
+        claims.put(JwtClaimsConstant.USER_ID,user.getId());
         String token = JwtUtil.createJWT(jwtProperties.getUserSecretKey(), jwtProperties.getUserTtl(), claims);
 
         UserLoginVO userLoginVO = UserLoginVO.builder()
@@ -62,21 +59,4 @@ public class UserController {
                 .build();
         return Result.success(userLoginVO);
     }
-
-    /**
-     * 历史订单查询
-     *
-     * @param page
-     * @param pageSize
-     * @param status   订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消
-     * @return
-     */
-    @GetMapping("/historyOrders")
-    @ApiOperation("历史订单查询")
-    public Result<PageResult> page(int page, int pageSize, Integer status) {
-        PageResult pageResult = orderService.pageQuery4User(page, pageSize, status);
-        return Result.success(pageResult);
-    }
-
-
 }
