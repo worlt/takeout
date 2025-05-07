@@ -115,4 +115,11 @@ public interface OrderService {
      * @param id
      */
     void reminder(Long id);
+
+    /**
+     * 根据订单号获取订单ID
+     * @param orderNumber
+     * @return
+     */
+    Long getOrderIdByNumber(String orderNumber);
 }

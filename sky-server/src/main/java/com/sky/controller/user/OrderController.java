@@ -61,6 +61,32 @@ public class OrderController {
     }
 
     /**
+     * 模拟支付接口
+     *
+     * @param ordersPaymentDTO
+     * @return
+     */
+    @PutMapping("/mockPayment")
+    @ApiOperation("模拟支付")
+    public Result<String> mockPayment(@RequestBody OrdersPaymentDTO ordersPaymentDTO) {
+        log.info("模拟支付订单：{}", ordersPaymentDTO);
+        try {
+            // 直接调用支付成功处理方法完成订单状态更新
+            orderService.paySuccess(ordersPaymentDTO.getOrderNumber());
+            
+            // 检查更新结果
+            Long orderId = orderService.getOrderIdByNumber(ordersPaymentDTO.getOrderNumber());
+            OrderVO orderVO = orderService.details(orderId);
+            log.info("模拟支付后订单状态：status={}, payStatus={}", orderVO.getStatus(), orderVO.getPayStatus());
+            
+            return Result.success("模拟支付成功");
+        } catch (Exception e) {
+            log.error("模拟支付失败：{}", e.getMessage());
+            return Result.error("模拟支付失败：" + e.getMessage());
+        }
+    }
+
+    /**
      * 查询订单详情
      *
      * @param id

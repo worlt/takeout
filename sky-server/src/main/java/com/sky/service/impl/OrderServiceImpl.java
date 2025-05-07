@@ -173,29 +173,39 @@ public class OrderServiceImpl implements OrderService {
      * @param outTradeNo
      */
     public void paySuccess(String outTradeNo) {
-        // 当前登录用户id
-        Long userId = BaseContext.getCurrentId();
+        try {
+            // 当前登录用户id
+            Long userId = BaseContext.getCurrentId();
+    
+            // 根据订单号查询当前用户的订单
+            Orders ordersDB = orderMapper.getByNumberAndUserId(outTradeNo, userId);
+            if(ordersDB == null) {
+                throw new OrderBusinessException("订单不存在");
+            }
+    
+            // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
+            Orders orders = Orders.builder()
+                    .id(ordersDB.getId())
+                    .status(Orders.TO_BE_CONFIRMED)
+                    .payStatus(Orders.PAID)
+                    .checkoutTime(LocalDateTime.now())
+                    .build();
+    
+            log.info("更新订单状态：{}", orders);
+            orderMapper.update(orders);
 
-        // 根据订单号查询当前用户的订单
-        Orders ordersDB = orderMapper.getByNumberAndUserId(outTradeNo, userId);
-
-        // 根据订单id更新订单的状态、支付方式、支付状态、结账时间
-        Orders orders = Orders.builder()
-                .id(ordersDB.getId())
-                .status(Orders.TO_BE_CONFIRMED)
-                .payStatus(Orders.PAID)
-                .checkoutTime(LocalDateTime.now())
-                .build();
-
-        orderMapper.update(orders);
-
-        // WebSocket通知
-        Map map = new HashMap();
-        map.put("type", 1); // 消息类型：1表示来单提醒
-        map.put("openId", orders.getId());
-        map.put("content", "订单号：" + outTradeNo);
-        // 通过WebSocket实现来单提醒，向客户端浏览器推送消息
-        webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    
+            // WebSocket通知
+            Map map = new HashMap();
+            map.put("type", 1); // 消息类型：1表示来单提醒
+            map.put("orderId", orders.getId());
+            map.put("content", "订单号：" + outTradeNo);
+            // 通过WebSocket实现来单提醒，向客户端浏览器推送消息
+            webSocketServer.sendToAllClient(JSON.toJSONString(map));
+        } catch (Exception e) {
+            log.error("订单支付完成状态更新失败：{}", e.getMessage());
+            throw new OrderBusinessException("订单支付状态更新失败");
+        }
     }
 
     /**
@@ -537,14 +547,35 @@ public class OrderServiceImpl implements OrderService {
     public void reminder(Long id) {
         // 查询订单是否存在
         Orders orders = orderMapper.getById(id);
-        if (orders == null) throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
 
-        // 基于WebSocket实现催单
+        // 通过websocket向客户端浏览器推送消息
         Map map = new HashMap();
-        map.put("type", 2); // 2代表用户催单
+        map.put("type", 2);//2代表用户催单
         map.put("orderId", id);
         map.put("content", "订单号：" + orders.getNumber());
         webSocketServer.sendToAllClient(JSON.toJSONString(map));
+    }
+
+    /**
+     * 根据订单号获取订单ID
+     * @param orderNumber
+     * @return
+     */
+    @Override
+    public Long getOrderIdByNumber(String orderNumber) {
+        // 当前登录用户id
+        Long userId = BaseContext.getCurrentId();
+        
+        // 根据订单号查询当前用户的订单
+        Orders ordersDB = orderMapper.getByNumberAndUserId(orderNumber, userId);
+        if (ordersDB == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        
+        return ordersDB.getId();
     }
 
     /**
