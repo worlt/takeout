@@ -6,6 +6,7 @@ import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -87,4 +88,16 @@ public interface OrderMapper {
      * @param begin
      * @param end
      */
-    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);}
+    List<GoodsSalesDTO> getSalesTop10(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 用于替换微信支付更新数据库的问题
+     * @param orderStatus
+     * @param orderPaidStatus
+     * @param checkOutTime
+     * @param orderNumber
+     */
+    @Update("update orders set status = #{orderStatus}, pay_status = #{orderPaidStatus}, checkout_time = #{checkOutTime}" +
+            "where number = #{orderNumber}")
+    void updateStatus(Integer orderStatus, Integer orderPaidStatus, LocalDateTime checkOutTime, String orderNumber);
+}
