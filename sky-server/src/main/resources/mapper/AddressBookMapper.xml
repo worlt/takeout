@@ -9,18 +9,18 @@
               consignee = #{consignee},
           </if>
           <if test="sex != null">
-              sex = #{sex}
+              sex = #{sex},
           </if>
           <if test="phone != null">
-              phone = #{phone}
+              phone = #{phone},
           </if>
           <if test="detail != null">
-              detial = #{detail}
+              detail = #{detail},
           </if>
           <if test="label != null">
-              label != #{label}
+              label = #{label},
           </if>
-          <if test="idDefault != null">
+          <if test="isDefault != null">
               is_default = #{isDefault}
           </if>
       </set>

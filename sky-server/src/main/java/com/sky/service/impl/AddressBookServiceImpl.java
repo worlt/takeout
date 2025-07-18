@@ -46,7 +46,7 @@ public class AddressBookServiceImpl implements AddressBookService {
 
     @Override
     public AddressBook getById(Long id) {
-        return null;
+        return addressBookMapper.getById(id);
     }
 
     /**
@@ -66,13 +66,14 @@ public class AddressBookServiceImpl implements AddressBookService {
     @Override
     public void setDefault(AddressBook addressBook) {
         // 1、将当前用户的所有地址修改为非默认地址 update address_book set is_default = ? where user_id = ?
-        addressBook.setIsDefault(0);
-        addressBook.setUserId(BaseContext.getCurrentId());
-        addressBookMapper.updateIsDefaultByUserId(addressBook);
+        AddressBook updateAddressBook = new AddressBook();
+        updateAddressBook.setIsDefault(0);
+        updateAddressBook.setUserId(BaseContext.getCurrentId());
+        addressBookMapper.updateIsDefaultByUserId(updateAddressBook);
 
         // 2、将当前地址修改为默认地址 update address_book set is_default = ? where id = ?
         addressBook.setIsDefault(1);
-        addressBookMapper.updateIsDefaultByUserId(addressBook);
+        addressBookMapper.update(addressBook);
     }
 
     /**
@@ -81,6 +82,6 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public void deleteById(Long id) {
-        addressBookMapper.deletById(id);
+        addressBookMapper.deleteById(id);
     }
 }

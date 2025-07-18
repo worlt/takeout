@@ -36,13 +36,13 @@ logging:
 sky:
   jwt:
     # 设置jwt签名加密时使用的秘钥
-    admin-secret-key: worlt
+    admin-secret-key: sky-takeout-admin-jwt-secret-key-2023
     # 设置jwt过期时间
     admin-ttl: 7200000
     # 设置前端传递过来的令牌名称
     admin-token-name: token
     # 设置jwt签名加密时使用的秘钥
-    user-secret-key: worlt
+    user-secret-key: sky-takeout-user-jwt-secret-key-2023
     # 设置jwt过期时间
     user-ttl: 7200000
     # 设置前端传递过来的令牌名称
@@ -66,5 +66,5 @@ bitiful:
   endpoint: https://s3.bitiful.net/
   region: cn-north-1
   access-key: ${bitiful.access-key}
-  secret-key: ${bitiful.access-key}
+  secret-key: ${bitiful.secret-key}
   bucket-name: worlt-pic/sky-take-away
