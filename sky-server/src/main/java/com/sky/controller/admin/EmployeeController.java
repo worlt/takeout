@@ -81,7 +81,7 @@ public class EmployeeController {
     public Result save(@RequestBody EmployeeDTO employeeDTO){
         log.info("新增员工：{}", employeeDTO);
         employeeService.save(employeeDTO);
-        return null;
+        return Result.success();
     }
 
     /**
@@ -105,9 +105,9 @@ public class EmployeeController {
      */
     @PostMapping("/status/{status}")
     @ApiOperation("启用禁用员工")
-    public Result startOrStop(@PathVariable("status") Integer status, Long id) {
+    public Result startOrStop(@PathVariable("status") Integer status, @RequestParam Long id) {
         log.info("启用禁用员工账号：{}，{}", status, id);
-        employeeService.sartOrStop(status, id);
+        employeeService.startOrStop(status, id);
         return Result.success();
     }
 
@@ -118,10 +118,10 @@ public class EmployeeController {
      */
     @GetMapping("/{id}")
     @ApiOperation("根据ID查询员工")
-    public Result getById(@PathVariable("id") Long id) {
+    public Result<Employee> getById(@PathVariable("id") Long id) {
         log.info("根据ID查询员工：{}", id);
-        employeeService.getById(id);
-        return Result.success();
+        Employee employee = employeeService.getById(id);
+        return Result.success(employee);
     }
 
     /**
